@@ -1,0 +1,52 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.10.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+
+group = 'org.mskcc.igo.pi'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+	mavenLocal()
+}
+
+configurations {
+	all*.exclude module : 'spring-boot-starter-logging'
+	all*.exclude module : 'logback-classic'
+}
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-security')
+
+	compile('org.springframework.boot:spring-boot-starter-web') {
+	}
+
+	compile ('org.springframework.boot:spring-boot-starter-log4j2'){
+//		exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl'
+//		exclude group: 'ch.qos.logback', module: 'logback-classic'
+	}
+
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile('org.springframework.security:spring-security-test')
+}
+
+bootRun {
+	systemProperties = System.properties
+
+	if (System.getProperty('DEBUG', 'false') == 'true') {
+		jvmArgs '-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5007'
+	}
+}
