@@ -34,10 +34,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web') {
 	}
 
-	compile ('org.springframework.boot:spring-boot-starter-log4j2'){
-//		exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl'
-//		exclude group: 'ch.qos.logback', module: 'logback-classic'
-	}
+	compile ('org.springframework.boot:spring-boot-starter-log4j2')
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.security:spring-security-test')
