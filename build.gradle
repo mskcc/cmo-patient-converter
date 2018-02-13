@@ -51,3 +51,7 @@ bootRun {
 springBoot {
 	executable = true
 }
+
+jar {
+	baseName = 'cmo-patient-converter'
+}
