@@ -23,19 +23,21 @@ public class CmoPatientIdController {
     private CRDBToCmoConverter crdbToCmoConverter;
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/patient/{mrn}")
-    public ResponseEntity<String> getCmoPatientId(@PathVariable String mrn) {
+    @GetMapping("/patient/{patientId}")
+    public ResponseEntity<String> getCmoPatientId(@PathVariable String patientId) {
         try {
-            String crdbPatientId = crdbPatientIdRetriever.resolve(mrn);
+            String crdbPatientId = crdbPatientIdRetriever.resolve(patientId);
 
             return ResponseEntity.ok().body(crdbToCmoConverter.convert(crdbPatientId));
         } catch (RestCRDBPatientIdRetriever.CmoPatientIdRetrievalException e) {
-            LOGGER.error(String.format("Error while retrieving CMO patient id for mrn: %s. Cause: %s", mrn, e
+            LOGGER.error(String.format("Error while retrieving CMO Patient id for patientId: %s. Cause: %s",
+                    patientId, e
                     .getMessage()));
 
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            LOGGER.error(String.format("Error while retrieving CMO patient id for mrn: %s. Cause: %s", mrn, e
+            LOGGER.error(String.format("Error while retrieving CMO Patient id for patientId: %s. Cause: %s",
+                    patientId, e
                     .getMessage()));
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
