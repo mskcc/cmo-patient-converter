@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.InterceptingClientHttpRequestFactory;
 import org.springframework.http.client.support.BasicAuthorizationInterceptor;
@@ -13,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Configuration
+@PropertySource("classpath:external-connection-${spring.profiles.active}.properties")
 public class AppConfig {
     @Value("${crdb.username}")
     private String crdbUsername;
