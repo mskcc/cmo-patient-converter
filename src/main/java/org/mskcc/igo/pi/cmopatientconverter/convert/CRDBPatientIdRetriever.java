@@ -1,5 +1,7 @@
 package org.mskcc.igo.pi.cmopatientconverter.convert;
 
+import org.mskcc.igo.pi.cmopatientconverter.crdb.PatientInfo;
+
 public interface CRDBPatientIdRetriever {
-    String resolve(String mrn);
+    PatientInfo resolve(String mrn);
 }

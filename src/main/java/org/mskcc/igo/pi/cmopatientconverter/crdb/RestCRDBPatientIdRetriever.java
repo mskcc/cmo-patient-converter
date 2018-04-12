@@ -28,20 +28,20 @@ public class RestCRDBPatientIdRetriever implements CRDBPatientIdRetriever {
     private RestTemplate restTemplate;
 
     @Override
-    public String resolve(String mrn) {
-        CRDBPatientInfo crdbPatientInfo = restTemplate.getForObject(getUrl(mrn), CRDBPatientInfo.class);
+    public PatientInfo resolve(String mrn) {
+        PatientInfo patientInfo = restTemplate.getForObject(getUrl(mrn), PatientInfo.class);
 
-        String patientId = crdbPatientInfo.getPatientId();
+        String patientId = patientInfo.getPatientId();
 
         if (StringUtils.isEmpty(patientId)) {
             throw new CmoPatientIdRetrievalException(String.format("CRDB patient id could not be retrieved from " +
-                    "service: %s%s for mrn: %s. Cause: %s", crdbServiceUrl, endpoint, mrn, crdbPatientInfo
+                    "service: %s%s for mrn: %s. Cause: %s", crdbServiceUrl, endpoint, mrn, patientInfo
                     .getErrorMessage()));
         }
 
         LOGGER.info(String.format("Retrieved CRDB Patient id: %s", patientId));
 
-        return patientId;
+        return patientInfo;
     }
 
     private String getUrl(String mrn) {
