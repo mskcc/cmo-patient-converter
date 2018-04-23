@@ -15,7 +15,7 @@ apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 
 group = 'org.mskcc.igo.pi'
-version = '0.1.0'
+version = '0.2.0-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
@@ -29,6 +29,8 @@ configurations {
 }
 
 dependencies {
+	compile group: 'org.mskcc.common', name:'common-domain', version: '2.4.0-SNAPSHOT'
+
 	compile('org.springframework.boot:spring-boot-starter-security')
 
 	compile('org.springframework.boot:spring-boot-starter-web') {
@@ -38,6 +40,7 @@ dependencies {
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.security:spring-security-test')
+	testCompile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.9'
 }
 
 bootRun {
