@@ -15,7 +15,7 @@ apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 
 group = 'org.mskcc.igo.pi'
-version = '0.2.0'
+version = '0.3.0-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
