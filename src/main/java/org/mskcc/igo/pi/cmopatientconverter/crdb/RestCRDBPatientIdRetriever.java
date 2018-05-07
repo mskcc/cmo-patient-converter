@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
+import static org.mskcc.igo.pi.cmopatientconverter.utils.Utils.getRedactedPatientId;
+
 @Component
 public class RestCRDBPatientIdRetriever implements CRDBPatientIdRetriever {
     private static final Logger LOGGER = LogManager.getLogger(RestCRDBPatientIdRetriever.class);
@@ -28,18 +30,18 @@ public class RestCRDBPatientIdRetriever implements CRDBPatientIdRetriever {
     private RestTemplate restTemplate;
 
     @Override
-    public PatientInfo resolve(String mrn) {
-        PatientInfo patientInfo = restTemplate.getForObject(getUrl(mrn), PatientInfo.class);
+    public PatientInfo resolve(String patientId) {
+        PatientInfo patientInfo = restTemplate.getForObject(getUrl(patientId), PatientInfo.class);
 
-        String patientId = patientInfo.getPatientId();
+        String cmoPatientId = patientInfo.getPatientId();
 
-        if (StringUtils.isEmpty(patientId)) {
+        if (StringUtils.isEmpty(cmoPatientId)) {
             throw new CmoPatientIdRetrievalException(String.format("CRDB patient id could not be retrieved from " +
-                    "service: %s%s for mrn: %s. Cause: %s", crdbServiceUrl, endpoint, mrn, patientInfo
-                    .getErrorMessage()));
+                    "service: %s%s for patient id: %s. Cause: %s", crdbServiceUrl, endpoint, getRedactedPatientId
+                    (patientId), patientInfo.getErrorMessage()));
         }
 
-        LOGGER.info(String.format("Retrieved CRDB Patient id: %s", patientId));
+        LOGGER.info(String.format("Retrieved CRDB Patient id: %s", cmoPatientId));
 
         return patientInfo;
     }

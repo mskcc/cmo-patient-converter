@@ -83,13 +83,14 @@ public class CmoPatientConverterApplicationTests {
     @WithMockUser(roles = "ADMIN")
     public void whenMrnDoesNotExist_shouldReturnBadRequest() throws Exception {
         //given
-        String mrn = "54543";
-        when(crdbPatientIdRetriever.resolve(mrn)).thenThrow(RestCRDBPatientIdRetriever.CmoPatientIdRetrievalException
+        String patientId = "54543";
+        when(crdbPatientIdRetriever.resolve(patientId)).thenThrow(RestCRDBPatientIdRetriever
+                .CmoPatientIdRetrievalException
                 .class);
 
         //when
         mvc
-                .perform(MockMvcRequestBuilders.get("/patient/" + mrn))
+                .perform(MockMvcRequestBuilders.get("/patient/" + patientId))
 
                 //then
                 .andExpect(status().isBadRequest());
@@ -99,12 +100,12 @@ public class CmoPatientConverterApplicationTests {
     @WithMockUser(roles = "ADMIN")
     public void whenUnknownExceptionOccurs_shouldReturnServerError() throws Exception {
         //given
-        String mrn = "54543";
-        when(crdbPatientIdRetriever.resolve(mrn)).thenThrow(RuntimeException.class);
+        String patientId = "54543";
+        when(crdbPatientIdRetriever.resolve(patientId)).thenThrow(RuntimeException.class);
 
         //when
         mvc
-                .perform(MockMvcRequestBuilders.get("/patient/" + mrn))
+                .perform(MockMvcRequestBuilders.get("/patient/" + patientId))
 
                 //then
                 .andExpect(status().isInternalServerError());
