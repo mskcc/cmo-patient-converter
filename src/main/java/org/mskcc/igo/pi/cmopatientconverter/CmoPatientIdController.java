@@ -7,6 +7,7 @@ import org.mskcc.igo.pi.cmopatientconverter.convert.CRDBPatientIdRetriever;
 import org.mskcc.igo.pi.cmopatientconverter.convert.CRDBToCmoConverter;
 import org.mskcc.igo.pi.cmopatientconverter.crdb.PatientInfo;
 import org.mskcc.igo.pi.cmopatientconverter.crdb.RestCRDBPatientIdRetriever;
+import org.mskcc.igo.pi.cmopatientconverter.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CmoPatientIdController {
     private static final Logger LOGGER = LogManager.getLogger(CmoPatientIdController.class);
+
     @Autowired
     private CRDBPatientIdRetriever crdbPatientIdRetriever;
 
@@ -33,14 +35,12 @@ public class CmoPatientIdController {
             return ResponseEntity.ok().body(crdbToCmoConverter.convert(patientInfo.getPatientId()));
         } catch (RestCRDBPatientIdRetriever.CmoPatientIdRetrievalException e) {
             LOGGER.error(String.format("Error while retrieving CMO Patient id for patientId: %s. Cause: %s",
-                    patientId, e
-                    .getMessage()));
+                    Utils.getRedactedPatientId(patientId), e.getMessage()));
 
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             LOGGER.error(String.format("Error while retrieving CMO Patient id for patientId: %s. Cause: %s",
-                    patientId, e
-                    .getMessage()));
+                    Utils.getRedactedPatientId(patientId), e.getMessage()));
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
@@ -56,12 +56,9 @@ public class CmoPatientIdController {
             CRDBPatientInfo crdbPatientInfo = convert(patientInfo);
 
             return ResponseEntity.ok().body(crdbPatientInfo);
-        } catch (RestCRDBPatientIdRetriever.CmoPatientIdRetrievalException e) {
-            LOGGER.error(String.format("Error while retrieving CMO Patient id for patientId: %s", patientId), e);
-
-            throw new RuntimeException(patientInfo.getErrorMessage() + e.getMessage());
         } catch (Exception e) {
-            LOGGER.error(String.format("Error while retrieving CMO Patient id for patientId: %s", patientId), e);
+            LOGGER.error(String.format("Error while retrieving CMO Patient id for patientId: %s",
+                    Utils.getRedactedPatientId(patientId)), e);
 
             throw new RuntimeException(patientInfo.getErrorMessage() + e.getMessage());
         }
